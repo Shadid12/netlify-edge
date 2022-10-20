@@ -22,13 +22,13 @@ export async function middleware(nextRequest: NextRequest) {
 
     // Send Customized Promotions
     const client = getClient(nextRequest?.geo?.country);
-    // const promotionResponse = await client.query(
-    //   q.Map(
-    //     q.Paginate(q.Documents(q.Collection('Promotion'))),
-    //     q.Lambda(x => q.Get(x))
-    //   )
-    // ) as any;
-    // response.setPageProp("promotion", promotionResponse.data);
+    const promotionResponse = await client.query(
+      q.Map(
+        q.Paginate(q.Documents(q.Collection('Promotion'))),
+        q.Lambda(x => q.Get(x))
+      )
+    ) as any;
+    response.setPageProp("promotion", promotionResponse.data);
 
     return response;
   }
