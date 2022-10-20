@@ -1,17 +1,38 @@
-import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
-import faunadb from "faunadb";
-export const q = faunadb.query;
+import { createClient } from 'urql';
 
-export const getClient = (region) => {
-  let config = {
-    secret: 'fnAEyRPatvAAS-NyeZ__gnOl9irmJNCKA54Rm1V2',
-    domain: 'db.us.fauna.com',
-  };
-  if (region === 'DE' || region === 'FR') {
-    config = {
-      secret: "fnAEyQ4M9fAAyzq3hnegxEZI0yysL9-RCk2WFCgb",
-      domain: 'db.eu.fauna.com',
+const query = `
+{
+  listPromotions {
+    data {
+      _id
+      title
+      img
     }
   }
-  return new faunadb.Client(config)
+}
+`;
+
+let token = `fnAEyRPatvAAS-NyeZ__gnOl9irmJNCKA54Rm1V2`;
+let url = 'https://graphql.us.fauna.com/graphql';
+
+export const getData = async (region) => {
+
+  if((region === 'FR') || (region === 'DE')) {
+    token = `fnAEyQ4M9fAAyzq3hnegxEZI0yysL9-RCk2WFCgb`;
+    url = 'https://graphql.eu.fauna.com/graphql';
+  }
+
+  const client = createClient({
+    url,
+    fetchOptions: () => {
+      return {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      };
+    }
+  });
+
+  const result = await client.query(query).toPromise();
+  return result.data.listPromotions.data;
 };

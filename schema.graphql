@@ -1,0 +1,8 @@
+type Promotion {
+  title: String!
+  img: String!
+}
+
+type Query {
+  listPromotions: [Promotion]!
+}
