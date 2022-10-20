@@ -12,13 +12,13 @@ const query = `
 }
 `;
 
-let token = `fnAEyRPatvAAS-NyeZ__gnOl9irmJNCKA54Rm1V2`;
+let token = Deno.env.get('FAUNA_SECRET_US');
 let url = 'https://graphql.us.fauna.com/graphql';
 
 export const getData = async (region) => {
 
   if((region === 'FR') || (region === 'DE')) {
-    token = `fnAEyQ4M9fAAyzq3hnegxEZI0yysL9-RCk2WFCgb`;
+    token = Deno.env.get('FAUNA_SECRET_EU');
     url = 'https://graphql.eu.fauna.com/graphql';
   }
 
